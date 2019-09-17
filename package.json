@@ -1,0 +1,30 @@
+{
+  "name": "dp-graph-angular",
+  "version": "0.0.1",
+  "description": "program to create a dependency graph of your current project",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/ChristianLutz/dp-graph-angular.git"
+  },
+  "keywords": [
+    "node",
+    "typescript",
+    "angular",
+    "dependency",
+    "graph"
+  ],
+  "author": "Christian Lutz",
+  "license": "MIT Licence",
+  "bugs": {
+    "url": "https://github.com/ChristianLutz/dp-graph-angular/issues"
+  },
+  "homepage": "https://github.com/ChristianLutz/dp-graph-angular#readme",
+  "devDependencies": {
+    "tslint": "^5.20.0",
+    "typescript": "^3.6.3"
+  }
+}
