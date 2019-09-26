@@ -28,7 +28,7 @@ const HtmlWebpackPlugin = require('html-webpack-plugin');
 module.exports = {
 	mode: 'development',
 	entry: './src/index.ts',
-
+	target: 'node',
 	output: {
 		filename: '[name].[chunkhash].js',
 		path: path.resolve(__dirname, 'dist')
@@ -69,5 +69,10 @@ module.exports = {
 
 	resolve: {
 		extensions: ['.tsx', '.ts', '.js']
-	}
+	},
+
+	node: {
+		child_process: 'empty',
+		fs: 'empty'
+    }
 };

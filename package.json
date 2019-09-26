@@ -38,5 +38,11 @@
     "webpack": "^4.40.2",
     "webpack-cli": "^3.3.9",
     "webpack-dev-server": "^3.8.1"
-  }
+  },
+  "dependencies": {
+    "commander": "^3.0.2"
+  },
+  "browser":{
+    "child_process": false
+  }  
 }
