@@ -26,53 +26,57 @@ const HtmlWebpackPlugin = require('html-webpack-plugin');
  */
 
 module.exports = {
-	mode: 'development',
-	entry: './src/index.ts',
-	target: 'node',
-	output: {
-		filename: '[name].[chunkhash].js',
-		path: path.resolve(__dirname, 'dist')
-	},
+    mode: 'development',
+    entry: './src/index.ts',
+    target: 'node',
+    output: {
+        filename: '[name].js',
+        path: path.resolve(__dirname, 'dist')
+    },
 
-	plugins: [new webpack.ProgressPlugin(), new HtmlWebpackPlugin()],
+    plugins: [new webpack.ProgressPlugin(), new HtmlWebpackPlugin()],
 
-	module: {
-		rules: [
-			{
-				test: /.(ts|tsx)?$/,
-				loader: 'ts-loader',
-				include: [path.resolve(__dirname, 'src')],
-				exclude: [/node_modules/]
-			}
-		]
-	},
+    module: {
+        rules: [
+            {
+                test: /.(ts|tsx)?$/,
+                loader: 'ts-loader',
+                include: [path.resolve(__dirname, 'src')],
+                exclude: [/node_modules/]
+            },
+            {
+                test: /\.node$/,
+                use: 'node-loader'
+            }
+        ]
+    },
 
-	optimization: {
-		splitChunks: {
-			cacheGroups: {
-				vendors: {
-					priority: -10,
-					test: /[\\/]node_modules[\\/]/
-				}
-			},
+    optimization: {
+        splitChunks: {
+            cacheGroups: {
+                vendors: {
+                    priority: -10,
+                    test: /[\\/]node_modules[\\/]/
+                }
+            },
 
-			chunks: 'async',
-			minChunks: 1,
-			minSize: 30000,
-			name: true
-		}
-	},
+            chunks: 'async',
+            minChunks: 1,
+            minSize: 30000,
+            name: true
+        }
+    },
 
-	devServer: {
-		open: true
-	},
+    devServer: {
+        open: true
+    },
 
-	resolve: {
-		extensions: ['.tsx', '.ts', '.js']
-	},
+    resolve: {
+        extensions: ['.tsx', '.ts', '.js']
+    },
 
-	node: {
-		child_process: 'empty',
-		fs: 'empty'
+    node: {
+        child_process: 'empty',
+        fs: 'empty'
     }
 };

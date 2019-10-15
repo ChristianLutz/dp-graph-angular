@@ -1,19 +1,19 @@
 {
-  "compilerOptions": {
-    "target": "es5",
-    "module": "es6",
-    "outDir": "dist",
-    "strict": true,
-    "noUnusedLocals": true,
-    "noUnusedParameters": true,
-    "noImplicitReturns": true,
-    "esModuleInterop": true,
-    "sourceMap": true,
-    "allowSyntheticDefaultImports": true,
-    "noImplicitAny": true,
-    "allowJs": true
-  },
-  "include": [
-    "src/**/*"
-  ]
+    "compilerOptions": {
+        "target": "es2015",
+        "module": "es6",
+        "outDir": "dist",
+        "strict": true,
+        "noUnusedLocals": true,
+        "noUnusedParameters": true,
+        "noImplicitReturns": true,
+        "esModuleInterop": true,
+        "sourceMap": true,
+        "allowSyntheticDefaultImports": true,
+        "noImplicitAny": true,
+        "allowJs": true,
+        "moduleResolution": "node",
+        "lib": ["dom", "es5", "es2019.array"]
+    },
+    "include": ["src/**/*"]
 }
