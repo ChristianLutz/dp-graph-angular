@@ -8,7 +8,7 @@ import * as fs from 'fs';
 import 'ts-polyfill/lib/es2019-array';
 
 async function execute(): Promise<void> {
-    const asts = await new TsFileToAst().allFilesToAst();
+    const asts = await new TsFileToAst().allFilesToAst('./test-resources/simple');
     console.log(asts[0]);
     const model = new AstToGraph().toD3Model(asts);
     const svg = await new DependencyGraph(600, 600).toSvg(model);
