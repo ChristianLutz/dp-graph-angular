@@ -17,8 +17,6 @@ export interface D3GraphModel {
 }
 
 export interface D3GraphLink extends SimulationLinkDatum<D3GraphNode> {
-    srcId: string;
-    trgId: string;
     value: number;
 }
 

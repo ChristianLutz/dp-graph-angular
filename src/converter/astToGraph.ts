@@ -15,32 +15,51 @@ export class AstToGraph {
     }
 
     private extendModelByFileAst(ast: File, model: D3GraphModel): void {
-        if (ast.imports && ast.imports.length > 0) {
-            model.nodes.push({ id: ast.filePath, group: 0 });
+        const fileNameWithExtension = ast.filePath.split('/').pop();
+        if (fileNameWithExtension) {
+            const fileName = fileNameWithExtension.split('.')[0];
+            this.addNode(fileName, 0, model);
 
-            ast.imports
-                .map(value => value.libraryName.split('/').pop())
-                .filter<string>((libName): libName is string => libName != undefined && libName != null)
-                // .flatMap(value => (value as any).specifiers)
-                // .map(value => value.specifier)
-                .forEach(importName => {
-                    model.nodes.push({ id: importName, group: 1 });
-                    model.links.push({
-                        srcId: ast.filePath,
-                        source: ast.filePath,
-                        trgId: importName,
-                        target: importName,
-                        value: 1
+            if (ast.imports && ast.imports.length > 0) {
+                ast.imports
+                    .map(value => value.libraryName.split('/').pop())
+                    .filter<string>((libName): libName is string => libName != undefined && libName != null)
+                    // .flatMap(value => (value as any).specifiers)
+                    // .map(value => value.specifier)
+                    .forEach(importName => {
+                        this.addNode(importName, 1, model);
+                        this.addLink(fileName, importName, 1, model);
                     });
-                });
 
-            // const links: D3GraphLink[] = ast.imports
-            //     .map(imp => (imp as any).specifiers
-            //         .map(value => value.specifier)
-            //         .map(importName => ({ srcId: importName, trgId: , value: 1 })));
-            console.log(ast.imports);
-            console.log((ast.imports[0] as any).specifiers);
-            console.log(model);
+                // const links: D3GraphLink[] = ast.imports
+                //     .map(imp => (imp as any).specifiers
+                //         .map(value => value.specifier)
+                //         .map(importName => ({ srcId: importName, trgId: , value: 1 })));
+
+                console.log(model);
+            }
+        }
+    }
+
+    private addNode(nodeName: string, group: number, model: D3GraphModel): void {
+        const existingNode = model.nodes.find(n => n.id === nodeName);
+        if (existingNode) {
+            if (group < existingNode.group) {
+                existingNode.group = group;
+            }
+        } else {
+            model.nodes.push({ id: nodeName, group: group });
+        }
+    }
+
+    private addLink(source: string, target: string, value: number, model: D3GraphModel): void {
+        const existingLink = model.links.find(l => l.source === source && l.target === target);
+        if (!existingLink) {
+            model.links.push({
+                source: source,
+                target: target,
+                value: value
+            });
         }
     }
 }
