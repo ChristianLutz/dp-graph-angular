@@ -7,8 +7,8 @@ import * as fs from 'fs';
 // polyfill
 import 'ts-polyfill/lib/es2019-array';
 
-async function execute(rootPath: string): Promise<void> {
-    const asts = await new TsFileToAst().allFilesToAst(rootPath);
+async function execute(rootPath: string, enableNodeModulesScan: boolean): Promise<void> {
+    const asts = await new TsFileToAst().allFilesToAst(rootPath, enableNodeModulesScan);
     const model = new AstToGraph().toD3Model(asts);
     const svg = await new DependencyGraph(2400, 2400).toSvg(model);
     fs.writeFile('test.svg', svg.outerHTML, err => console.log(err));
@@ -17,7 +17,10 @@ async function execute(rootPath: string): Promise<void> {
 
 const program = new Command();
 program.version('0.0.1');
-program.option('-d, --debug', 'output extra debugging').option('-r, --root-path', 'root path (default ./)');
+program
+    .option('-d, --debug', 'output extra debugging')
+    .option('-r, --root-path', 'root path (default ./)')
+    .option('-e, --enable-node-modules-scan', 'by deafault node modules will be ignored');
 
 program.parse(process.argv);
 if (program.debug) {
@@ -28,5 +31,10 @@ if (program.rootPath) {
     console.log(`- ${program.rootPath}`);
     rootPath = program.rootPath;
 }
+let enableNodeModulesScan = false;
+if (program.enableNodeModulesScan) {
+    console.log(`- ${program.enableNodeModulesScan}`);
+    enableNodeModulesScan = true;
+}
 
-execute(rootPath);
+execute(rootPath, enableNodeModulesScan);

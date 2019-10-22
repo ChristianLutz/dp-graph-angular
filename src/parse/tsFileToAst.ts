@@ -3,8 +3,12 @@ import * as fs from 'fs';
 import * as path from 'path';
 
 export class TsFileToAst {
-    public async allFilesToAst(rootPath: string): Promise<File[]> {
-        return await Promise.all(this.findAllTsFiles(rootPath).map(fileName => this.parseFile(fileName)));
+    private readonly NODE_MODULES_FOLDER: string = 'node_modules';
+
+    public async allFilesToAst(rootPath: string, enableNodeModulesScan: boolean): Promise<File[]> {
+        return await Promise.all(
+            this.findAllTsFiles(rootPath, enableNodeModulesScan).map(fileName => this.parseFile(fileName))
+        );
     }
 
     public async fileToAst(file: string): Promise<File> {
@@ -17,7 +21,7 @@ export class TsFileToAst {
         return await parser.parseFile(fileName, rootPath);
     }
 
-    private findAllTsFiles(rootPath: string): string[] {
+    private findAllTsFiles(rootPath: string, enableNodeModulesScan: boolean): string[] {
         const result = [];
 
         const files = [rootPath];
@@ -25,7 +29,7 @@ export class TsFileToAst {
             const filepath = files.pop();
             if (filepath) {
                 const fileStatus = fs.lstatSync(filepath);
-                if (fileStatus.isDirectory()) {
+                if (fileStatus.isDirectory() && this.readThisDirectory(filepath, enableNodeModulesScan)) {
                     fs.readdirSync(filepath).forEach(f => files.push(path.join(filepath, f)));
                 } else if (fileStatus.isFile() && filepath.indexOf('.ts') > 0) {
                     result.push(rootPath + '/' + path.relative(rootPath, filepath));
@@ -34,5 +38,12 @@ export class TsFileToAst {
         } while (files.length !== 0);
 
         return result;
+    }
+
+    private readThisDirectory(directory: string, enableNodeModulesScan: boolean): boolean {
+        if (directory.toLowerCase() === this.NODE_MODULES_FOLDER) {
+            return enableNodeModulesScan;
+        }
+        return true;
     }
 }
