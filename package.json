@@ -46,7 +46,7 @@
         "webpack-dev-server": "^4.11.1"
     },
     "dependencies": {
-        "canvas": "^2.6.1",
+        "canvas": "^2.11.2",
         "commander": "^3.0.2",
         "d3": "^7.6.1",
         "jsdom": "^16.7.0",
